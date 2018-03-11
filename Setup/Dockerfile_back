@@ -1,0 +1,22 @@
+FROM centos
+MAINTAINER HUXINMIN
+
+# wget
+RUN yum -y install wget
+
+#centos7 修改yum源为阿里源
+RUN mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup \
+	&& cd /etc/yum.repos.d \
+	&& wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo \
+	&& yum clean all \
+	&& yum makecache
+
+# 安装环境
+# nodejs
+RUN  cd /usr/local/src 
+RUN	  wget https://nodejs.org/dist/v8.9.1/node-v8.9.1-linux-x64.tar.gz 
+RUN	 tar -zxvf node-v8.9.1-linux-x64.tar.gz 
+RUN	 mv node-v8.9.1-linux-x64 /usr/local/node 
+ENV   NODE_HOME=/usr/local/node PATH=$PATH:$NODE_HOME/bin NODE_PATH=$NODE_HOME/lib/node_modules
+RUN	 echo "node" 
+CMD	 ["node","node -v"]
